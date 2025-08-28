@@ -1,0 +1,121 @@
+<% layout("/layout/boilerplate.ejs") -%>
+
+<div class="container info-container">
+  <div class="col-12">
+    <img
+      src="<%= hotelData.image %>"
+      alt="hotel image"
+      class="img-fluid center rounded d-block mx-auto m-2"
+    />
+  </div>
+  <h1 class="card-heading"><%= hotelData.title %></h1>
+  <div>
+    <p class="card-text"><%= hotelData.description %></p>
+    <p class="">&#x20B9;<%= hotelData.price.toLocaleString("en-IN") %>/night</p>
+    <span class="cart"><%= hotelData.location%>, <%= hotelData.country %></span>
+    <br />
+    <br />
+
+    <p>Property By <b><%= hotelData.owner.username %></b></p>
+    <div class="row">
+      <% if (currUser && currUser.id === hotelData.owner.id) { %>
+
+      <form
+        action="/listing/edit/<%= hotelData._id %>"
+        method="get"
+        class="col-6 g-2 gx-4"
+      >
+        <button type="submit" class="btn btn-primary">edit</button>
+      </form>
+
+      <form
+        method="POST"
+        action="/listing/delete/<%= hotelData._id %>?_method=DELETE"
+        class="col-6 g-2"
+      >
+        <button type="submit" class="btn btn-danger">delete</button>
+      </form>
+
+      <% } %>
+    </div>
+  </div>
+</div>
+
+<hr />
+
+<!-- review form  -->
+
+<div class="form-group">
+  <h3>Leave a review</h3>
+  <form
+    action="/listing/<%= hotelData._id %>/review"
+    method="post"
+    class="needs-validation"
+    novalidate
+  >
+    <div class="mb-2">
+      <label for="rating" class="form-label"> Rating </label>
+      <div class="rating-container">
+        <input
+          type="range"
+          name="rating"
+          id="rating"
+          max="5"
+          min="1"
+          class="form-range"
+        />
+        <div class="rating-labels">
+          <span>1</span>
+          <span>5</span>
+        </div>
+      </div>
+    </div>
+    <div>
+      <label for="comment" class="form-label">
+        <textarea
+          name="comment"
+          rows="5"
+          cols="50"
+          id=""
+          class="form-control"
+          placeholder="write your thoughts"
+          required
+        ></textarea>
+        <div class="invalid-feedback">please write some comments</div>
+      </label>
+    </div>
+    <button type="submit" class="btn btn-danger">submit</button>
+  </form>
+</div>
+
+<!-- displaying review  -->
+
+<hr />
+
+<div class="container">
+  <div class="row">
+    <% for(let review of hotelData.reviews ) { %>
+    <div class="card review-card m-2 col-3" style="width: 18rem">
+      <div class="card-body">
+        <h6><%= review.createdBy.username %></h3>
+        <p class="card-text"><%= review.comment %></p>
+        <h6 class="card-subtitle mb-2 text-body-secondary">
+          <%= `${review.rating} Star` %>
+        </h6>
+
+        <% if (currUser && currUser.id === review.createdBy.id) { %>
+
+        <form
+          method="post"
+          action="/listing/<%= hotelData._id %>/review/<%= review.id %>?_method=DELETE"
+        >
+          <button type="submit" class="btn btn-sm btn-dark review-delete-btn">
+            Delete
+          </button>
+        </form>
+        <% } %>
+      </div>
+    </div>
+    <% } %>
+  </div>
+</div>

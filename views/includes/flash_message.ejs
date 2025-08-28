@@ -1,0 +1,36 @@
+<% if (success.length > 0) { %>
+<div class="flash-message success" id="flash-success">
+  <span class="icon success-icon">✔</span>
+  <span><%= success[0] %></span>
+  <span class="close-btn" onclick="this.parentElement.remove()">✖</span>
+</div>
+<% } %> <% if (error.length > 0) { %>
+<div class="flash-message error" id="flash-error">
+  <span class=" error-icon">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      class="icon"
+    >
+      <path
+        fill-rule="evenodd"
+        d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12 8.25a.75.75 0 01.75.75v4.5a.75.75 0 01-1.5 0v-4.5A.75.75 0 0112 8.25zm0 8.25a.75.75 0 100-1.5.75.75 0 000 1.5z"
+        clip-rule="evenodd"
+      />
+    </svg>
+  </span>
+  <span><%= error[0] %></span>
+  <span class="close-btn" onclick="this.parentElement.remove()">✖</span>
+</div>
+<% } %>
+
+<script>
+  // Auto remove after 3 sec
+  setTimeout(() => {
+    const success = document.getElementById("flash-success");
+    const error = document.getElementById("flash-error");
+    if (success) success.remove();
+    if (error) error.remove();
+  }, 4000);
+</script>

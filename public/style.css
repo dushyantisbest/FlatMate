@@ -1,0 +1,167 @@
+html,
+body {
+  height: 100%;
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+  padding-top: 80px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.navbar {
+  background-color: #fef2f4 !important;
+  /* box-shadow: 2px 2px 2px black; */
+  box-shadow: 2px 3px 6px 2px rgb(149, 133, 133);
+}
+
+.nav-link:hover {
+  color: black;
+  font-weight: 600;
+}
+
+.card-link {
+  text-decoration: none;
+}
+
+.listing-card:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  transform: scale(1.03);
+  transition: box-shadow 0.3s, transform 0.3s, border-color 0.3s;
+}
+
+.card-img {
+  height: 16rem;
+  object-fit: cover;
+}
+
+.card-text {
+  font-family: Helvetica, sans-serif, Arial;
+}
+
+.info-container .img-fluid {
+  width: 35rem;
+  height: 35rem;
+  object-fit: cover;
+}
+
+.info-container {
+  height: auto;
+  width: 35rem;
+  padding: 3rem;
+}
+
+form .btn {
+  width: 6rem;
+  text-align: center;
+  margin: 20px;
+}
+
+.form-submit-btn {
+  background-color: #ee0a47 !important;
+  color: white;
+}
+
+footer {
+  background-color: #fef2f4;
+  width: 100%;
+  position: relative;
+  left: 0;
+  bottom: 0;
+  /* background: #fff; */
+  z-index: 100;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.rating-container {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+}
+
+.rating-labels {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 5px;
+}
+
+.review-delete-btn {
+  margin: 0.1px !important;
+}
+
+/* flash message styling and animation
+ */
+.flash-message {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  min-width: 250px;
+  padding: 10px 16px;
+  border-radius: 10px;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 9999;
+  color: #333;
+  animation: fadeIn 0.3s ease, fadeOut 0.3s ease 3.8s forwards;
+}
+
+.flash-message .icon {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.success-icon {
+  color: #28a745; /* green tick */
+}
+
+.error-icon {
+  color: #dc3545; /* red cross */
+}
+
+.flash-message .close-btn {
+  margin-left: auto;
+  cursor: pointer;
+  font-weight: bold;
+  color: #888;
+}
+
+.flash-message .close-btn:hover {
+  color: #000;
+}
+
+.error-icon .icon {
+  /* Control the size here */
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-right: 1px;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeOut {
+  to {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}
+
+.container {
+  flex: 1;
+}

@@ -1,0 +1,85 @@
+<% layout("/layout/boilerplate.ejs") -%>
+
+<form action="/listing/add" method="post" class="needs-validation" novalidate>
+  <h1>Enter Details</h1>
+  <div class="row">
+    <label for="title" class="form-label">
+      Hotel Name
+      <input
+        class="form-control"
+        type="text"
+        name="title"
+        id=""
+        placeholder="Grand Palace Hotel"
+        required
+      />
+      <div class="invalid-feedback">please provide hotel name</div>
+    </label>
+    <label for="image" class="form-label">
+      image link
+      <input
+        class="form-control"
+        type="text"
+        name="image"
+        id=""
+        placeholder="https://example.com/hotel.jpg"
+      />
+    </label>
+
+    <label for="description" class="form-label">
+      description
+      <textarea
+        name="description"
+        rows="5"
+        columns="7"
+        placeholder="A luxurious hotel in the heart of the city with free WiFi and breakfast."
+        id=""
+        class="form-control"
+        required
+      ></textarea>
+      <div class="invalid-feedback">please provide description</div>
+    </label>
+
+    <label for="location" class="form-label col-8">
+      location
+      <input
+        class="form-control"
+        type="text"
+        name="location"
+        placeholder="123 Main St, Downtown"
+        id=""
+        required
+      />
+      <div class="invalid-feedback">please provide location</div>
+    </label>
+
+    <label for="country" class="form-label col-4">
+      country
+      <input
+        class="form-control"
+        type="text"
+        name="country"
+        placeholder="United States"
+        id=""
+        required
+      />
+      <div class="invalid-feedback">please provide country name</div>
+    </label>
+
+    <label for="price" class="form-label">
+      price
+      <input
+        class="form-control"
+        type="number"
+        name="price"
+        placeholder="1200"
+        required
+      />
+      <div class="invalid-feedback">please provide price</div>
+    </label>
+
+    <button type="submit" class="btn mx-auto d-block form-submit-btn">
+      submit
+    </button>
+  </div>
+</form>

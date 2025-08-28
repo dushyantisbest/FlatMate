@@ -1,0 +1,87 @@
+<% layout("/layout/boilerplate.ejs") -%>
+<form
+  method="post"
+  action="/listing/edit/<%= hotelData._id %>?_method=PUT"
+  class="needs-validation"
+  novalidate
+>
+  <h1>Enter Details</h1>
+  <div class="row">
+    <label class="form-label" for="title">
+      <input
+        class="form-control"
+        type="text"
+        name="title"
+        id=""
+        placeholder="Grand Palace Hotel"
+        value="<%=hotelData.title%>"
+        required
+      />
+      <div class="invalid-feedback">please provide hotel name</div>
+    </label>
+    <label class="form-label" for="image">
+      <input
+        class="form-control"
+        type="text"
+        name="image"
+        id=""
+        placeholder="https://example.com/hotel.jpg"
+        value="<%=hotelData.image%>"
+        required
+      />
+      <div class="invalid-feedback">please enter image link</div>
+    </label>
+    <label class="form-label" for="description">
+      <textarea
+        name="description"
+        rows="5"
+        columns="7"
+        placeholder="A luxurious hotel in the heart of the city with free WiFi and breakfast."
+        id=""
+        class="form-control"
+        required
+      >
+<%= hotelData.description %></textarea
+      >
+      <div class="invalid-feedback">please provide description</div>
+    </label>
+    <label class="form-label col-8" for="location">
+      <input
+        class="form-control"
+        type="text"
+        name="location"
+        placeholder="123 Main St, Downtown"
+        id=""
+        value="<%=hotelData.location%>"
+        required
+      />
+      <div class="invalid-feedback">please provide location</div>
+    </label>
+    <label class="form-label col-4" for="country">
+      <input
+        class="form-control"
+        type="text"
+        name="country"
+        placeholder="United States"
+        id=""
+        value="<%=hotelData.country%>"
+        required
+      />
+      <div class="invalid-feedback">please provide country name</div>
+    </label>
+    <label class="form-label" for="price">
+      <input
+        class="form-control"
+        type="number"
+        name="price"
+        placeholder="1200"
+        value="<%=hotelData.price%>"
+        required
+      />
+      <div class="invalid-feedback">please provide price</div>
+    </label>
+    <button type="submit" class="btn mx-auto d-block form-submit-btn">
+      submit
+    </button>
+  </div>
+</form>

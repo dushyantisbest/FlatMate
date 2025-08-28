@@ -1,0 +1,36 @@
+<% layout("/layout/boilerplate.ejs") -%>
+<div class="col-6 offset-3">
+  <form action="/user/login" method="post" class="needs-validation" novalidate>
+    <h1>Login to Flatmate</h1>
+    <div class="row">
+      <label for="username" class="form-label">
+        Username
+        <input
+          class="form-control"
+          type="text"
+          name="username"
+          id=""
+          placeholder=""
+          required
+        />
+        <div class="invalid-feedback">please provide username</div>
+      </label>
+
+      <label for="password" class="form-label">
+        password
+        <input
+          class="form-control"
+          type="password"
+          name="password"
+          placeholder=""
+          required
+        />
+        <div class="invalid-feedback">please provide password</div>
+      </label>
+
+      <button type="submit" class="btn mx-auto d-block form-submit-btn">
+        submit
+      </button>
+    </div>
+  </form>
+</div>
