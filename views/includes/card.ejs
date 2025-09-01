@@ -1,10 +1,14 @@
-<a href="/listing/<%= listItem._id %>" class="card-link">
-  <div class="card listing-card border-light mb-3" style="width: 18rem">
-    <img src="<%= listItem.image %>" class="card-img img-fluid" alt="..." />
-    <div class="card-body">
-      <h5 class="card-title"><%= listItem.title %></h5>
-      <br />
-      <p class="card-text">
+<a href="/listing/<%= listItem._id %>" class="card-link text-decoration-none">
+  <div class="card listing-card border-light h-100">
+    <img
+      src="<%= listItem.image %>"
+      class="card-img-top img-fluid"
+      style="height: 200px; object-fit: cover"
+      alt="<%= listItem.title %>"
+    />
+    <div class="card-body d-flex flex-column">
+      <h5 class="card-title text-dark"><%= listItem.title %></h5>
+      <p class="card-text mt-auto text-dark">
         &#x20B9;<%= listItem.price.toLocaleString("en-IN") %>
       </p>
     </div>

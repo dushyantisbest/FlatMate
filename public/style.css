@@ -64,6 +64,16 @@ form .btn {
   color: white;
 }
 
+form .logout-btn {
+  margin: 3px;
+}
+
+.review-submit-btn {
+  margin: 0px;
+  width: 8rem;
+  background-color: yellow;
+}
+
 footer {
   background-color: #fef2f4;
   width: 100%;

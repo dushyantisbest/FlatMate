@@ -11,7 +11,9 @@ await connectionInstance();
 // InputData();
 
 //routes
-
+app.get("/", (req, res) => {
+  res.redirect("/listing");
+});
 app.use("/listing", listingRoute);
 app.use("/listing/:id/review", reviewRoute);
 app.use("/user", userRoute);

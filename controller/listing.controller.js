@@ -1,4 +1,3 @@
-// import { express } from "express";
 import Listing from "../models/listing.model.js";
 
 export const homePage = async (req, res) => {
@@ -7,7 +6,7 @@ export const homePage = async (req, res) => {
 };
 
 export const listingForm = (req, res) => {
-  res.render("add_listing_form.ejs");
+  res.render("listings/add_listing_form.ejs");
 };
 
 export const addListing = async (req, res) => {
@@ -33,14 +32,14 @@ export const showIndivisualListing = async (req, res) => {
     req.flash("error", "Listing not found");
     res.redirect("/listing");
   } else {
-    res.render("indivisual_description.ejs", { hotelData });
+    res.render("listings/indivisual_description.ejs", { hotelData });
   }
 };
 
 export const editListingForm = async (req, res) => {
   const { id } = req.params;
   let hotelData = await Listing.findById(id);
-  res.render("edit_listing_form.ejs", { hotelData });
+  res.render("listings/edit_listing_form.ejs", { hotelData });
 };
 
 export const UpdateListing = async (req, res) => {

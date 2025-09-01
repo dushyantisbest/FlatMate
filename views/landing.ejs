@@ -1,12 +1,10 @@
-<div class="container">
-  <% layout("/layout/boilerplate.ejs") -%>
+<% layout("/layout/boilerplate.ejs") -%>
 
-  <h1>Listings</h1>
-  <ul>
-    <div class="row mt-4">
-      <% for(listItem of list) { %>
-      <div class="col-4"><%- include("includes/card.ejs",{listItem}) %></div>
-      <%}%>
-    </div>
-  </ul>
+<div class="container py-4">
+  <h1 class="mb-4">Listings</h1>
+  <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-4">
+    <% for(listItem of list) { %>
+    <div class="col"><%- include("includes/card.ejs",{listItem}) %></div>
+    <%}%>
+  </div>
 </div>
