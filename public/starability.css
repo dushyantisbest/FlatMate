@@ -208,21 +208,21 @@
 
 .stars.star-1::before {
   content: "★☆☆☆☆";
-  color: #000;
+  color: #ffc107;
 }
 .stars.star-2::before {
   content: "★★☆☆☆";
-  color: #000;
+  color: #ffc107;
 }
 .stars.star-3::before {
   content: "★★★☆☆";
-  color: #000;
+  color: #ffc107;
 }
 .stars.star-4::before {
   content: "★★★★☆";
-  color: #000;
+  color: #ffc107;
 }
 .stars.star-5::before {
   content: "★★★★★";
-  color: #000;
+  color: #ffc107;
 }

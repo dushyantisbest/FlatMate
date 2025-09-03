@@ -6,7 +6,7 @@
     </a>
 
     <button
-      class="navbar-toggler border-0"
+      class="navbar-toggler border-0 ms-6"
       type="button"
       data-bs-toggle="collapse"
       data-bs-target="#navbarNav"
@@ -15,6 +15,10 @@
       aria-label="Toggle navigation"
     >
       <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <button id="theme-toggle" class="theme-toggle d-lg-none ms-3" title="Toggle theme">
+      <i class="fa-solid fa-moon"></i>
     </button>
 
     <div class="collapse navbar-collapse" id="navbarNav">
@@ -47,26 +51,13 @@
           </form>
         </li>
         <% } %>
+        
+        <li class="nav-item d-flex align-items-center d-lg-flex d-none">
+          <button id="theme-toggle-desktop" class="theme-toggle ms-2" title="Toggle theme">
+            <i class="fa-solid fa-moon"></i>
+          </button>
+        </li>
       </ul>
     </div>
   </div>
 </nav>
-
-<!-- Add margin to body to prevent content from hiding under fixed navbar -->
-<!-- <style>
-  body {
-    padding-top: 4rem;
-  }
-
-  @media (max-width: 768px) {
-    .navbar .btn {
-      margin: 0.5rem 0;
-      display: block;
-      width: 100%;
-    }
-
-    .navbar-nav {
-      padding: 1rem 0;
-    }
-  }
-</style> -->

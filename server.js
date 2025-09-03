@@ -5,10 +5,10 @@ import listingRoute from "./routes/listingRoute.js";
 import reviewRoute from "./routes/reviewRoute.js";
 import userRoute from "./routes/userRoute.js";
 
-// import InputData from "./init.js";
+import InputData from "./init.js";
 await connectionInstance();
 //run to imput fake data
-// InputData();
+InputData();
 
 //routes
 app.get("/", (req, res) => {
@@ -28,6 +28,6 @@ app.use((err, req, res, next) => {
   res.status(statusCode).render("error.ejs", { statusCode, message });
 });
 
-app.listen(8080, () => {
+app.listen(process.env.PORT, () => {
   console.log("server is working");
 });

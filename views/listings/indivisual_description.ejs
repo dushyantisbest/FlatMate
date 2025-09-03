@@ -7,8 +7,7 @@
       <img
         src="<%= hotelData.image %>"
         alt="<%= hotelData.title %>"
-        class="img-fluid rounded shadow-sm w-100"
-        style="max-height: 500px; object-fit: cover"
+        class="img-fluid rounded shadow-sm w-100 individual-listing-img"
       />
     </div>
 
@@ -153,23 +152,4 @@
   </div>
 </div>
 
-<style>
-  .stars {
-    color: #ffc107;
-  }
 
-  .review-card {
-    transition: transform 0.2s;
-  }
-
-  .review-card:hover {
-    transform: translateY(-5px);
-  }
-
-  @media (max-width: 768px) {
-    .container {
-      padding-left: 15px;
-      padding-right: 15px;
-    }
-  }
-</style>

@@ -9,7 +9,7 @@ import flash from "connect-flash";
 import passport from "passport";
 import localStrategy from "passport-local";
 import User from "./models/user.model.js";
-
+import dotenv from "dotenv";
 //get the dirname variable
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -27,7 +27,7 @@ const sessionOptions = {
   },
 };
 //code for setting path
-
+dotenv.config();
 // all the middle wares
 app.engine("ejs", engine);
 app.set("view engine", "ejs");

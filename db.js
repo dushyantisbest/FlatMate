@@ -1,10 +1,12 @@
 import mongoose from "mongoose";
 
-const URL = "mongodb://localhost:27017/hotels";
 let connectionInstance;
 
 try {
-  connectionInstance = async () => await mongoose.connect(URL);
+  connectionInstance = async () =>
+    await mongoose.connect(process.env.MONGO_URI, {
+      dbName: process.env.DB_NAME,
+    });
   console.log("database connection succesful");
 } catch (error) {
   console.log("Database connection failed");

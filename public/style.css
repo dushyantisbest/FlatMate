@@ -1,3 +1,35 @@
+/* CSS Custom Properties for Theme Support */
+:root {
+  --background-color: #FFFFFF;
+  --surface-color: #F8F8F8;
+  --card-background: #FFFFFF;
+  --text-primary: #333333;
+  --text-secondary: #6c757d;
+  --text-muted: #6c757d;
+  --accent-color: #E53935;
+  --navbar-bg: #fef2f4;
+  --footer-bg: #fef2f4;
+  --border-color: #e5e5e5;
+  --shadow-color: rgba(0, 0, 0, 0.1);
+  --hover-shadow: rgba(0, 0, 0, 0.15);
+}
+
+/* Dark Theme Override */
+[data-theme="dark"] {
+  --background-color: #121212;
+  --surface-color: #1E1E1E;
+  --card-background: #1E1E1E;
+  --text-primary: #E0E0E0;
+  --text-secondary: #B0B0B0;
+  --text-muted: #888888;
+  --accent-color: #E53935;
+  --navbar-bg: #1E1E1E;
+  --footer-bg: #1E1E1E;
+  --border-color: #333333;
+  --shadow-color: rgba(0, 0, 0, 0.3);
+  --hover-shadow: rgba(0, 0, 0, 0.4);
+}
+
 html,
 body {
   height: 100%;
@@ -9,16 +41,22 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  background-color: var(--background-color);
+  color: var(--text-primary);
 }
 
 .navbar {
-  background-color: #fef2f4 !important;
-  /* box-shadow: 2px 2px 2px black; */
-  box-shadow: 2px 3px 6px 2px rgb(149, 133, 133);
+  background-color: var(--navbar-bg) !important;
+  box-shadow: 2px 3px 6px 2px var(--shadow-color);
+}
+
+.nav-link {
+  color: var(--text-primary) !important;
+  transition: color 0.3s ease;
 }
 
 .nav-link:hover {
-  color: black;
+  color: var(--accent-color) !important;
   font-weight: 600;
 }
 
@@ -26,10 +64,15 @@ body {
   text-decoration: none;
 }
 
+.listing-card {
+  background-color: var(--card-background);
+  border-color: var(--border-color);
+  transition: box-shadow 0.3s, transform 0.3s, border-color 0.3s, background-color 0.3s;
+}
+
 .listing-card:hover {
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 8px 24px var(--hover-shadow);
   transform: scale(1.03);
-  transition: box-shadow 0.3s, transform 0.3s, border-color 0.3s;
 }
 
 .card-img {
@@ -39,6 +82,20 @@ body {
 
 .card-text {
   font-family: Helvetica, sans-serif, Arial;
+  color: var(--text-primary);
+}
+
+.card-title {
+  color: var(--text-primary);
+}
+
+.card {
+  background-color: var(--card-background);
+  border-color: var(--border-color);
+}
+
+.text-muted {
+  color: var(--text-muted) !important;
 }
 
 .info-container .img-fluid {
@@ -75,14 +132,26 @@ form .logout-btn {
 }
 
 footer {
-  background-color: #fef2f4;
+  background-color: var(--footer-bg);
   width: 100%;
   position: relative;
   left: 0;
   bottom: 0;
-  /* background: #fff; */
   z-index: 100;
-  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 -2px 8px var(--shadow-color);
+}
+
+footer p {
+  color: var(--text-primary);
+}
+
+footer .icons a {
+  color: var(--text-primary);
+  transition: color 0.3s ease;
+}
+
+footer .icons a:hover {
+  color: var(--accent-color);
 }
 
 .rating-container {
@@ -115,11 +184,11 @@ footer {
   display: flex;
   align-items: center;
   gap: 10px;
-  background: #fff;
-  border: 1px solid #e5e5e5;
-  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  background: var(--card-background);
+  border: 1px solid var(--border-color);
+  box-shadow: 0px 4px 12px var(--shadow-color);
   z-index: 9999;
-  color: #333;
+  color: var(--text-primary);
   animation: fadeIn 0.3s ease, fadeOut 0.3s ease 3.8s forwards;
 }
 
@@ -174,4 +243,235 @@ footer {
 
 .container {
   flex: 1;
+}
+
+/* Styles moved from inline in templates */
+.card-img-top {
+  height: 200px;
+  object-fit: cover;
+}
+
+.individual-listing-img {
+  max-height: 500px;
+  object-fit: cover;
+}
+
+.stars {
+  color: #ffc107;
+}
+
+.review-card {
+  transition: transform 0.2s;
+}
+
+.review-card:hover {
+  transform: translateY(-5px);
+}
+
+/* Navbar responsive styles */
+@media (max-width: 768px) {
+  .navbar .btn {
+    margin: 1rem auto 0.5rem;
+    display: block;
+    width: 80%;
+    max-width: 200px;
+  }
+
+  .navbar-nav {
+    padding: 1rem 0;
+  }
+
+  .navbar-nav .nav-item {
+    margin: 0.3rem 0;
+  }
+
+  .navbar-nav .nav-link {
+    padding: 0.5rem 1rem;
+    font-weight: 500;
+  }
+
+  .theme-toggle {
+    position: absolute;
+    top: 8px;
+    right: 55px;
+    background: none;
+    border: none;
+    width: 31px;
+    height: 31px;
+    font-size: 16px;
+  }
+
+  .container {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+}
+
+/* Theme Toggle Button */
+.theme-toggle {
+  background: none;
+  border: 2px solid var(--text-primary);
+  color: var(--text-primary);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-left: 10px;
+}
+
+.theme-toggle:hover {
+  background-color: var(--accent-color);
+  border-color: var(--accent-color);
+  color: white;
+}
+
+/* Form styling for dark theme */
+.form-control {
+  background-color: var(--card-background);
+  border-color: var(--border-color);
+  color: var(--text-primary);
+}
+
+.form-control:focus {
+  background-color: var(--card-background);
+  border-color: var(--accent-color);
+  color: var(--text-primary);
+  box-shadow: 0 0 0 0.2rem rgba(229, 57, 53, 0.25);
+}
+
+.form-control::placeholder {
+  color: var(--text-muted);
+  opacity: 0.8;
+}
+
+[data-theme="dark"] .form-control::placeholder {
+  color: #999999;
+  opacity: 1;
+}
+
+.form-label {
+  color: var(--text-primary);
+}
+
+/* Button styling */
+.btn-outline-primary {
+  border-color: var(--accent-color);
+  color: var(--accent-color);
+}
+
+.btn-outline-primary:hover {
+  background-color: var(--accent-color);
+  border-color: var(--accent-color);
+}
+
+.btn-outline-danger {
+  border-color: #dc3545;
+  color: #dc3545;
+}
+
+.btn-outline-danger:hover {
+  background-color: #dc3545;
+  border-color: #dc3545;
+}
+
+/* Navbar brand styling */
+.navbar-brand {
+  color: var(--text-primary) !important;
+}
+
+.navbar-brand:hover {
+  color: var(--accent-color) !important;
+}
+
+/* Text color overrides for dark theme */
+[data-theme="dark"] .text-dark {
+  color: var(--text-primary) !important;
+}
+
+[data-theme="dark"] .text-secondary {
+  color: var(--text-secondary) !important;
+}
+
+/* Improve description text readability */
+p, .card-text, .card-body p {
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .text-muted {
+  color: #B0B0B0 !important;
+}
+
+/* Bootstrap overrides for dark theme */
+[data-theme="dark"] .bg-white {
+  background-color: var(--navbar-bg) !important;
+}
+
+[data-theme="dark"] .border-light {
+  border-color: var(--border-color) !important;
+}
+
+/* Fix hamburger menu visibility in dark mode */
+[data-theme="dark"] .navbar-toggler-icon {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28224, 224, 224, 0.75%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='m4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+.navbar-toggler {
+  border: none;
+  padding: 0.25rem;
+}
+
+.navbar-toggler:focus {
+  box-shadow: none;
+}
+
+[data-theme="dark"] .navbar-toggler:focus {
+  box-shadow: none;
+}
+
+/* Fix all headings and titles in dark mode */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--text-primary);
+}
+
+.h1, .h2, .h3, .h4, .h5, .h6 {
+  color: var(--text-primary);
+}
+
+/* Fix card titles specifically */
+.card-title, .card-body h1, .card-body h2, .card-body h3, .card-body h4, .card-body h5, .card-body h6 {
+  color: var(--text-primary) !important;
+}
+
+/* Fix profile icons visibility in dark mode */
+.fa-user-circle {
+  color: var(--text-secondary);
+}
+
+[data-theme="dark"] .fa-user-circle {
+  color: #C0C0C0 !important;
+}
+
+/* Fix review usernames */
+.card-body h6 {
+  color: var(--text-primary) !important;
+}
+
+/* Transitions only when toggling theme */
+.theme-transitioning body,
+.theme-transitioning .navbar,
+.theme-transitioning footer,
+.theme-transitioning .form-control,
+.theme-transitioning .card {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Center login/signup forms vertically */
+.auth-form-container {
+  min-height: calc(100vh - 160px);
+  display: flex;
+  align-items: center;
 }

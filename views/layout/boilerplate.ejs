@@ -20,6 +20,15 @@
     />
     <link rel="stylesheet" href="/starability.css" />
     <title>Hotels Listing</title>
+    <script>
+      // Apply theme immediately to prevent flash
+      (function() {
+        const theme = localStorage.getItem('theme');
+        if (theme === 'dark') {
+          document.documentElement.setAttribute('data-theme', 'dark');
+        }
+      })();
+    </script>
   </head>
   <body>
     <%- include("../includes/flash_message.ejs") %>
@@ -30,5 +39,6 @@
     <%- include("../includes/footer.ejs") %>
     <script src="/disable_validation.js"></script>
     <script src="/js/bootstrap.bundle.min.js"></script>
+    <script src="/theme-toggle.js"></script>
   </body>
 </html>
