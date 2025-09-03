@@ -5,10 +5,10 @@ import listingRoute from "./routes/listingRoute.js";
 import reviewRoute from "./routes/reviewRoute.js";
 import userRoute from "./routes/userRoute.js";
 
-import InputData from "./init.js";
+// import InputData from "./init.js";
 await connectionInstance();
 //run to imput fake data
-InputData();
+// InputData();
 
 //routes
 app.get("/", (req, res) => {
