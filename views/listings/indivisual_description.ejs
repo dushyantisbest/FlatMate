@@ -35,21 +35,25 @@
           </div>
 
           <% if (currUser && currUser.id === hotelData.owner.id) { %>
-          <div class="d-grid gap-2">
-            <form action="/listing/edit/<%= hotelData._id %>" method="get">
-              <button type="submit" class="btn btn-outline-primary w-100 mb-2">
-                <i class="fa-solid fa-edit me-2"></i>Edit Listing
-              </button>
-            </form>
+          <div class="text-center">
+            <div class="d-grid listing-action-buttons">
+              <form action="/listing/edit/<%= hotelData._id %>" method="get">
+                <button type="submit" class="btn btn-outline-primary w-100">
+                  <i class="fa-solid fa-edit"></i>
+                  <span>Edit Listing</span>
+                </button>
+              </form>
 
-            <form
-              method="POST"
-              action="/listing/delete/<%= hotelData._id %>?_method=DELETE"
-            >
-              <button type="submit" class="btn btn-outline-danger w-100">
-                <i class="fa-solid fa-trash me-2"></i>Delete Listing
-              </button>
-            </form>
+              <form
+                method="POST"
+                action="/listing/delete/<%= hotelData._id %>?_method=DELETE"
+              >
+                <button type="submit" class="btn btn-outline-danger w-100">
+                  <i class="fa-solid fa-trash"></i>
+                  <span>Delete Listing</span>
+                </button>
+              </form>
+            </div>
           </div>
           <% } %>
         </div>
