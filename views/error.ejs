@@ -1,6 +1,19 @@
 <% layout("layout/boilerplate.ejs") -%>
-<div class="alert alert-danger" role="alert">
-  <h4 class="alert-heading"><%= statusCode %></h4>
-  <p><%= message %></p>
-  <hr />
+<div class="row justify-content-center mt-5">
+  <div class="col-md-8 col-lg-6">
+    <div class="alert alert-danger" role="alert">
+      <div class="d-flex align-items-center mb-3">
+        <i class="fas fa-exclamation-triangle me-3" style="font-size: 2rem;"></i>
+        <h4 class="alert-heading mb-0">Error <%= statusCode %></h4>
+      </div>
+      <p class="mb-3"><%= message %></p>
+      <hr />
+      <div class="d-flex justify-content-between align-items-center">
+        <small class="text-muted">Something went wrong. Please try again.</small>
+        <a href="/" class="btn btn-outline-primary btn-sm">
+          <i class="fas fa-home me-1"></i>Go Home
+        </a>
+      </div>
+    </div>
+  </div>
 </div>

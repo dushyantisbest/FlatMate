@@ -587,3 +587,41 @@ h1, h2, h3, h4, h5, h6 {
 [data-theme="dark"] .listing-action-buttons .btn span {
   color: inherit !important;
 }
+
+/* Error page styling for better dark mode visibility */
+.alert {
+  background-color: var(--card-background);
+  border-color: var(--border-color);
+  color: var(--text-primary);
+}
+
+.alert-danger {
+  background-color: #f8d7da;
+  border-color: #f5c6cb;
+  color: #721c24;
+}
+
+[data-theme="dark"] .alert-danger {
+  background-color: #2d1b1e;
+  border-color: #5a2a2e;
+  color: #f8d7da;
+}
+
+[data-theme="dark"] .alert-danger .alert-heading {
+  color: #ff6b6b;
+}
+
+.alert-danger .alert-heading {
+  color: #721c24;
+  font-weight: 600;
+}
+
+.alert hr {
+  border-color: inherit;
+  opacity: 0.3;
+}
+
+[data-theme="dark"] .alert hr {
+  border-color: #5a2a2e;
+  opacity: 0.5;
+}
