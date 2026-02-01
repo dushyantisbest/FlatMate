@@ -1,7 +1,7 @@
 <a href="/listing/<%= listItem._id %>" class="card-link text-decoration-none">
   <div class="card listing-card border-light h-100">
     <img
-      src="<%= listItem.image %>"
+      src="<%= listItem?.image?.url || '/images/default.jpg' %>"
       class="card-img-top img-fluid"
       alt="<%= listItem.title %>"
     />

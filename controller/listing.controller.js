@@ -10,8 +10,15 @@ export const listingForm = (req, res) => {
 };
 
 export const addListing = async (req, res) => {
-  const listingData = { ...req.body, owner: req.user.id };
-  await Listing.insertOne(listingData);
+  const listingData = {
+    ...req.body,
+    owner: req.user.id,
+    image: {
+      url: req.file?.path || "https://via.placeholder.com/600x400",
+      filename: req.file?.filename || "default",
+    },
+  };
+  await Listing.create(listingData);
   req.flash("success", "New Listing added ");
   res.redirect("/listing");
 };

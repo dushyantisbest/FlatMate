@@ -5,7 +5,7 @@
     <!-- Main Image Column -->
     <div class="col-lg-8 mb-4">
       <img
-        src="<%= hotelData.image %>"
+        src="<%= hotelData?.image?.url || 'https://via.placeholder.com/800x500' %>"
         alt="<%= hotelData.title %>"
         class="img-fluid rounded shadow-sm w-100 individual-listing-img"
       />

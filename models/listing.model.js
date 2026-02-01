@@ -5,14 +5,15 @@ const listingSchema = new mongoose.Schema(
   {
     title: { type: String, required: true },
     image: {
-      type: String,
-      required: true,
-      default:
-        "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1173&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      set: (value) =>
-        value === ""
-          ? "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1173&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-          : value,
+      url: {
+        type: String,
+        required: true,
+        default: "https://via.placeholder.com/600x400",
+      },
+      filename: {
+        type: String,
+        default: "default",
+      },
     },
     price: { type: Number, required: true },
     location: { type: String, required: true },
@@ -21,7 +22,7 @@ const listingSchema = new mongoose.Schema(
     reviews: [{ type: Schema.Types.ObjectId, ref: "Review" }],
     owner: { type: Schema.Types.ObjectId, ref: "User", required: true },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 // mongoose middleware to remove all the reviews when the listing is deleted
