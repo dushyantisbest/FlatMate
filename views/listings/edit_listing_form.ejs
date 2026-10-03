@@ -1,87 +1,145 @@
 <% layout("/layout/boilerplate.ejs") -%>
-<form
-  method="post"
-  action="/listing/edit/<%= hotelData._id %>?_method=PUT"
-  class="needs-validation"
-  novalidate
->
-  <h1>Enter Details</h1>
-  <div class="row">
-    <label class="form-label" for="title">
-      <input
-        class="form-control"
-        type="text"
-        name="title"
-        id=""
-        placeholder="Grand Palace Hotel"
-        value="<%=hotelData.title%>"
-        required
-      />
-      <div class="invalid-feedback">please provide hotel name</div>
-    </label>
-    <label class="form-label" for="image">
-      <input
-        class="form-control"
-        type="text"
-        name="image"
-        id=""
-        placeholder="https://example.com/hotel.jpg"
-        value="<%=hotelData.image%>"
-        required
-      />
-      <div class="invalid-feedback">please enter image link</div>
-    </label>
-    <label class="form-label" for="description">
-      <textarea
-        name="description"
-        rows="5"
-        columns="7"
-        placeholder="A luxurious hotel in the heart of the city with free WiFi and breakfast."
-        id=""
-        class="form-control"
-        required
+
+<div class="row justify-content-center py-4">
+  <div class="col-12 col-md-10 col-lg-8">
+    <div class="card border-0 shadow-sm rounded-4 p-4 p-md-5">
+      <h2 class="fw-bold mb-4"><i class="fa-solid fa-pen-to-square me-2 text-danger"></i>Edit Flatmate Listing</h2>
+      
+      <form
+        method="post"
+        action="/listing/edit/<%= hotelData._id %>?_method=PUT"
+        class="needs-validation"
+        enctype="multipart/form-data"
+        novalidate
       >
-<%= hotelData.description %></textarea
-      >
-      <div class="invalid-feedback">please provide description</div>
-    </label>
-    <label class="form-label col-8" for="location">
-      <input
-        class="form-control"
-        type="text"
-        name="location"
-        placeholder="123 Main St, Downtown"
-        id=""
-        value="<%=hotelData.location%>"
-        required
-      />
-      <div class="invalid-feedback">please provide location</div>
-    </label>
-    <label class="form-label col-4" for="country">
-      <input
-        class="form-control"
-        type="text"
-        name="country"
-        placeholder="United States"
-        id=""
-        value="<%=hotelData.country%>"
-        required
-      />
-      <div class="invalid-feedback">please provide country name</div>
-    </label>
-    <label class="form-label" for="price">
-      <input
-        class="form-control"
-        type="number"
-        name="price"
-        placeholder="1200"
-        value="<%=hotelData.price%>"
-        required
-      />
-      <div class="invalid-feedback">please provide price</div>
-    </label>
-    <button type="submit" class="btn mx-auto d-block form-submit-btn">
-      submit
-    </button>
+        <div class="row g-3">
+          <div class="col-12">
+            <label class="form-label fw-semibold" for="title">Listing Title</label>
+            <input
+              class="form-control"
+              type="text"
+              name="title"
+              id="title"
+              value="<%= hotelData.title %>"
+              required
+            />
+            <div class="invalid-feedback">Please provide a title</div>
+          </div>
+
+          <div class="col-md-6">
+            <label for="category" class="form-label fw-semibold">Category</label>
+            <select name="category" class="form-select" id="category">
+              <% const cats = ["1BHK", "2BHK", "3BHK", "4BHK", "villa", "studio", "penthouse", "farmhouse", "roommate", "flatmate"]; %>
+              <% cats.forEach(c => { %>
+                <option value="<%= c %>" <%= hotelData.category === c ? 'selected' : '' %>><%= c %></option>
+              <% }) %>
+            </select>
+          </div>
+
+          <div class="col-md-6">
+            <label for="roomType" class="form-label fw-semibold">Room Type</label>
+            <select name="roomType" class="form-select" id="roomType">
+              <% const roomTypes = ["Single Room", "Shared Room", "Entire Flat", "Private Room"]; %>
+              <% roomTypes.forEach(rt => { %>
+                <option value="<%= rt %>" <%= hotelData.roomType === rt ? 'selected' : '' %>><%= rt %></option>
+              <% }) %>
+            </select>
+          </div>
+
+          <div class="col-md-6">
+            <label for="genderPreference" class="form-label fw-semibold">Gender Preference</label>
+            <select name="genderPreference" class="form-select" id="genderPreference">
+              <% const genders = ["Any", "Female only", "Male only", "No Preference"]; %>
+              <% genders.forEach(g => { %>
+                <option value="<%= g %>" <%= hotelData.genderPreference === g ? 'selected' : '' %>><%= g %></option>
+              <% }) %>
+            </select>
+          </div>
+
+          <div class="col-md-6">
+            <label for="furnishing" class="form-label fw-semibold">Furnishing</label>
+            <select name="furnishing" class="form-select" id="furnishing">
+              <% const furnishes = ["Furnished", "Semi-Furnished", "Unfurnished"]; %>
+              <% furnishes.forEach(f => { %>
+                <option value="<%= f %>" <%= hotelData.furnishing === f ? 'selected' : '' %>><%= f %></option>
+              <% }) %>
+            </select>
+          </div>
+
+          <div class="col-12">
+            <label class="form-label fw-semibold" for="image">Replace Image (Optional)</label>
+            <% if (hotelData.image && hotelData.image.url) { %>
+              <div class="mb-2">
+                <img src="<%= hotelData.image.url %>" class="rounded-3 shadow-sm" style="max-height: 140px; object-fit: cover;" alt="Current photo" />
+              </div>
+            <% } %>
+            <input
+              class="form-control"
+              type="file"
+              name="image"
+              id="image"
+              accept="image/*"
+            />
+          </div>
+
+          <div class="col-12">
+            <label class="form-label fw-semibold" for="description">Description</label>
+            <textarea
+              name="description"
+              rows="4"
+              id="description"
+              class="form-control"
+              required
+            ><%= hotelData.description %></textarea>
+            <div class="invalid-feedback">Please provide description</div>
+          </div>
+
+          <div class="col-md-8">
+            <label class="form-label fw-semibold" for="location">Locality</label>
+            <input
+              class="form-control"
+              type="text"
+              name="location"
+              id="location"
+              value="<%= hotelData.location %>"
+              required
+            />
+            <div class="invalid-feedback">Please provide location</div>
+          </div>
+
+          <div class="col-md-4">
+            <label class="form-label fw-semibold" for="country">Country</label>
+            <input
+              class="form-control"
+              type="text"
+              name="country"
+              id="country"
+              value="<%= hotelData.country %>"
+              required
+            />
+            <div class="invalid-feedback">Please provide country</div>
+          </div>
+
+          <div class="col-12">
+            <label class="form-label fw-semibold" for="price">Monthly Rent (&#x20B9;)</label>
+            <input
+              class="form-control"
+              type="number"
+              name="price"
+              id="price"
+              value="<%= hotelData.price %>"
+              required
+            />
+            <div class="invalid-feedback">Please provide rent</div>
+          </div>
+
+          <div class="col-12 mt-4 text-center">
+            <button type="submit" class="btn btn-danger btn-lg rounded-pill px-5 shadow-sm">
+              <i class="fa-solid fa-floppy-disk me-2"></i>Update Listing
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
   </div>
-</form>
+</div>

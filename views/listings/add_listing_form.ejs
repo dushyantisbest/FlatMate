@@ -1,85 +1,144 @@
 <% layout("/layout/boilerplate.ejs") -%>
 
-<form action="/listing/add" method="post" class="needs-validation" novalidate>
-  <h1>Enter Details</h1>
-  <div class="row">
-    <label for="title" class="form-label">
-      Hotel Name
-      <input
-        class="form-control"
-        type="text"
-        name="title"
-        id=""
-        placeholder="Grand Palace Hotel"
-        required
-      />
-      <div class="invalid-feedback">please provide hotel name</div>
-    </label>
-    <label for="image" class="form-label">
-      image link
-      <input
-        class="form-control"
-        type="text"
-        name="image"
-        id=""
-        placeholder="https://example.com/hotel.jpg"
-      />
-    </label>
+<div class="row justify-content-center py-4">
+  <div class="col-12 col-md-10 col-lg-8">
+    <div class="card border-0 shadow-sm rounded-4 p-4 p-md-5">
+      <h2 class="fw-bold mb-4"><i class="fa-solid fa-house-chimney-medical me-2 text-danger"></i>Post a Flatmate Listing</h2>
+      
+      <form action="/listing/add" method="post" class="needs-validation" enctype="multipart/form-data" novalidate>
+        <div class="row g-3">
+          <div class="col-12">
+            <label for="title" class="form-label fw-semibold">Listing Title</label>
+            <input
+              class="form-control"
+              type="text"
+              name="title"
+              id="title"
+              placeholder="e.g. Spacious 2BHK room near Cyber City Metro"
+              required
+            />
+            <div class="invalid-feedback">Please provide a descriptive title</div>
+          </div>
 
-    <label for="description" class="form-label">
-      description
-      <textarea
-        name="description"
-        rows="5"
-        columns="7"
-        placeholder="A luxurious hotel in the heart of the city with free WiFi and breakfast."
-        id=""
-        class="form-control"
-        required
-      ></textarea>
-      <div class="invalid-feedback">please provide description</div>
-    </label>
+          <div class="col-md-6">
+            <label for="category" class="form-label fw-semibold">Property Category</label>
+            <select name="category" class="form-select" id="category" required>
+              <option value="1BHK" selected>1BHK</option>
+              <option value="2BHK">2BHK</option>
+              <option value="3BHK">3BHK</option>
+              <option value="4BHK">4BHK</option>
+              <option value="studio">Studio</option>
+              <option value="villa">Villa</option>
+              <option value="penthouse">Penthouse</option>
+              <option value="farmhouse">Farmhouse</option>
+              <option value="roommate">Roommate Needed</option>
+              <option value="flatmate">Flatmate</option>
+            </select>
+            <div class="invalid-feedback">Please select a category</div>
+          </div>
 
-    <label for="location" class="form-label col-8">
-      location
-      <input
-        class="form-control"
-        type="text"
-        name="location"
-        placeholder="123 Main St, Downtown"
-        id=""
-        required
-      />
-      <div class="invalid-feedback">please provide location</div>
-    </label>
+          <div class="col-md-6">
+            <label for="roomType" class="form-label fw-semibold">Room Type</label>
+            <select name="roomType" class="form-select" id="roomType">
+              <option value="Single Room" selected>Single Room</option>
+              <option value="Shared Room">Shared Room</option>
+              <option value="Entire Flat">Entire Flat</option>
+              <option value="Private Room">Private Room</option>
+            </select>
+          </div>
 
-    <label for="country" class="form-label col-4">
-      country
-      <input
-        class="form-control"
-        type="text"
-        name="country"
-        placeholder="United States"
-        id=""
-        required
-      />
-      <div class="invalid-feedback">please provide country name</div>
-    </label>
+          <div class="col-md-6">
+            <label for="genderPreference" class="form-label fw-semibold">Gender Preference</label>
+            <select name="genderPreference" class="form-select" id="genderPreference">
+              <option value="Any" selected>Any</option>
+              <option value="Female only">Female only</option>
+              <option value="Male only">Male only</option>
+              <option value="No Preference">No Preference</option>
+            </select>
+          </div>
 
-    <label for="price" class="form-label">
-      price
-      <input
-        class="form-control"
-        type="number"
-        name="price"
-        placeholder="1200"
-        required
-      />
-      <div class="invalid-feedback">please provide price</div>
-    </label>
+          <div class="col-md-6">
+            <label for="furnishing" class="form-label fw-semibold">Furnishing</label>
+            <select name="furnishing" class="form-select" id="furnishing">
+              <option value="Furnished" selected>Furnished</option>
+              <option value="Semi-Furnished">Semi-Furnished</option>
+              <option value="Unfurnished">Unfurnished</option>
+            </select>
+          </div>
 
-    <button type="submit" class="btn mx-auto d-block form-submit-btn">
-      submit
-    </button>
+          <div class="col-12">
+            <label for="image" class="form-label fw-semibold">Upload Photo</label>
+            <input
+              class="form-control"
+              type="file"
+              name="image"
+              id="image"
+              accept="image/*"
+            />
+            <small class="text-muted">Images are securely stored and optimized on Cloudinary.</small>
+          </div>
+
+          <div class="col-12">
+            <label for="description" class="form-label fw-semibold">Description & Preferences</label>
+            <textarea
+              name="description"
+              rows="4"
+              placeholder="Describe the place, nearby amenities, house rules, and flatmate vibes..."
+              id="description"
+              class="form-control"
+              required
+            ></textarea>
+            <div class="invalid-feedback">Please write a brief description</div>
+          </div>
+
+          <div class="col-md-8">
+            <label for="location" class="form-label fw-semibold">Locality / Address</label>
+            <input
+              class="form-control"
+              type="text"
+              name="location"
+              id="location"
+              placeholder="e.g. Indiranagar, Bangalore or Bandra West, Mumbai"
+              required
+            />
+            <div class="invalid-feedback">Please provide a locality for Mapbox geocoding</div>
+          </div>
+
+          <div class="col-md-4">
+            <label for="country" class="form-label fw-semibold">Country</label>
+            <input
+              class="form-control"
+              type="text"
+              name="country"
+              id="country"
+              placeholder="India"
+              value="India"
+              required
+            />
+            <div class="invalid-feedback">Please provide country name</div>
+          </div>
+
+          <div class="col-12">
+            <label for="price" class="form-label fw-semibold">Monthly Rent (&#x20B9;)</label>
+            <input
+              class="form-control"
+              type="number"
+              name="price"
+              id="price"
+              placeholder="e.g. 15000"
+              min="0"
+              required
+            />
+            <div class="invalid-feedback">Please specify monthly rent</div>
+          </div>
+
+          <div class="col-12 mt-4 text-center">
+            <button type="submit" class="btn btn-danger btn-lg rounded-pill px-5 shadow-sm">
+              <i class="fa-solid fa-cloud-arrow-up me-2"></i>Publish Listing
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
   </div>
-</form>
+</div>

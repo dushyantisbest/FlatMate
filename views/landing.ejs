@@ -1,10 +1,254 @@
 <% layout("/layout/boilerplate.ejs") -%>
 
-<div class="container py-4">
-  <h1 class="mb-4">Listings</h1>
-  <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-4">
-    <% for(listItem of list) { %>
-    <div class="col"><%- include("includes/card.ejs",{listItem}) %></div>
-    <%}%>
+<!-- Hero Section -->
+<div class="hero-banner py-5 px-3 mb-4 rounded-4 text-center position-relative overflow-hidden">
+  <div class="container py-2">
+    <span class="badge hero-badge px-3 py-2 rounded-pill mb-3 fw-semibold">
+      <i class="fa-solid fa-sparkles me-1 text-danger"></i> AI-Powered Roommate & Property Finder
+    </span>
+    <h1 class="display-5 fw-bold mb-3 hero-title" style="letter-spacing: -0.03em;">Find Your Ideal Flatmate & Space</h1>
+    <p class="lead hero-subtitle mx-auto mb-4" style="max-width: 650px; font-size: 1.05rem;">
+      Browse verified listings with real-time chat, interactive Mapbox maps, or let our AI Assistant find the perfect match for your budget.
+    </p>
+
+    <!-- Search & AI Bar -->
+    <div class="row justify-content-center g-2 mb-2">
+      <div class="col-12 col-md-7 col-lg-6">
+        <form action="/listing" method="GET" class="d-flex shadow-sm rounded-pill p-1 hero-search-form border">
+          <input
+            type="text"
+            name="search"
+            class="form-control border-0 rounded-pill ps-3 shadow-none hero-search-input"
+            placeholder="Search city, locality, title..."
+            value="<%= typeof search !== 'undefined' ? search : '' %>"
+          />
+          <% if (typeof selectedCategory !== 'undefined' && selectedCategory !== 'all') { %>
+            <input type="hidden" name="category" value="<%= selectedCategory %>" />
+          <% } %>
+          <button type="submit" class="btn btn-danger rounded-pill px-4">
+            <i class="fa-solid fa-magnifying-glass me-1"></i> Search
+          </button>
+        </form>
+      </div>
+      <div class="col-12 col-md-auto d-flex justify-content-center">
+        <a href="/ai" class="btn btn-outline-danger hero-ai-btn rounded-pill px-4 d-flex align-items-center shadow-sm">
+          <i class="fa-solid fa-wand-magic-sparkles text-danger me-2"></i> Try AI Search
+        </a>
+      </div>
+    </div>
   </div>
 </div>
+
+<!-- Category Filters & View Toggle -->
+<div class="container mb-4">
+  <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
+    <!-- Category pills -->
+    <div class="d-flex align-items-center gap-2 overflow-auto pb-2 category-scroll flex-grow-1" style="white-space: nowrap;">
+      <% 
+        const categories = [
+          { id: 'all', label: 'All Listings', icon: 'fa-house' },
+          { id: '1BHK', label: '1BHK', icon: 'fa-bed' },
+          { id: '2BHK', label: '2BHK', icon: 'fa-couch' },
+          { id: '3BHK', label: '3BHK', icon: 'fa-people-roof' },
+          { id: '4BHK', label: '4BHK', icon: 'fa-building' },
+          { id: 'studio', label: 'Studio', icon: 'fa-door-open' },
+          { id: 'villa', label: 'Villa', icon: 'fa-tree-city' },
+          { id: 'penthouse', label: 'Penthouse', icon: 'fa-city' },
+          { id: 'farmhouse', label: 'Farmhouse', icon: 'fa-tractor' }
+        ];
+        const activeCat = typeof selectedCategory !== 'undefined' ? selectedCategory : 'all';
+      %>
+
+      <% categories.forEach(cat => { %>
+        <a 
+          href="/listing?category=<%= cat.id %><%= (typeof search !== 'undefined' && search) ? '&search=' + encodeURIComponent(search) : '' %>"
+          class="btn btn-sm rounded-pill px-3 py-2 text-decoration-none <%= activeCat === cat.id ? 'btn-danger text-white fw-bold shadow-sm' : 'category-btn-inactive' %>"
+          style="transition: all 0.2s;"
+        >
+          <i class="fa-solid <%= cat.icon %> me-1"></i> <%= cat.label %>
+        </a>
+      <% }) %>
+    </div>
+
+    <!-- View Mode Toggle (Cards vs Mapbox Map) -->
+    <div class="btn-group rounded-pill p-1 border view-toggle-group shadow-sm" role="group">
+      <button type="button" id="btnCardsView" class="btn btn-sm btn-danger rounded-pill px-3 active">
+        <i class="fa-solid fa-grid-2 me-1"></i> Cards
+      </button>
+      <button type="button" id="btnMapView" class="btn btn-sm btn-outline-secondary rounded-pill px-3 border-0">
+        <i class="fa-solid fa-map-location-dot me-1 text-danger"></i> Map View
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Map View Container (Interactive Mapbox instance) -->
+<div class="container mb-4 d-none" id="homepageMapContainer">
+  <div class="card border-0 shadow-sm overflow-hidden rounded-4">
+    <div class="card-header bg-transparent d-flex justify-content-between align-items-center py-3 border-bottom">
+      <div>
+        <h5 class="fw-bold mb-0"><i class="fa-solid fa-map me-2 text-danger"></i>Explore Listings on Map</h5>
+        <small class="text-muted">Click any marker to preview property details</small>
+      </div>
+      <button class="btn btn-sm btn-outline-secondary rounded-pill" id="btnFitMap">
+        <i class="fa-solid fa-expand me-1"></i> Center Map
+      </button>
+    </div>
+    <div id="homepageMap" style="width: 100%; height: 480px;"></div>
+  </div>
+</div>
+
+<!-- Listings Container -->
+<div class="container py-2 mb-5" id="homepageCardsContainer">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h4 class="fw-bold mb-0 section-heading">
+      <% if (typeof selectedCategory !== 'undefined' && selectedCategory !== 'all') { %>
+        <%= selectedCategory.toUpperCase() %> Listings
+      <% } else { %>
+        Featured Properties
+      <% } %>
+    </h4>
+    <span class="text-muted small"><%= list.length %> property<%= list.length === 1 ? '' : 'ies' %> available</span>
+  </div>
+
+  <% if (list.length === 0) { %>
+    <div class="text-center py-5 my-4 bg-light empty-state-box rounded-4 border">
+      <i class="fa-solid fa-house-chimney-crack display-4 text-muted mb-3"></i>
+      <h5 class="fw-bold">No listings found</h5>
+      <p class="text-muted mb-3">Try adjusting your filters or ask our AI assistant to find matching places for you.</p>
+      <div class="d-flex justify-content-center gap-2">
+        <a href="/listing" class="btn btn-outline-secondary rounded-pill px-4">Reset Filters</a>
+        <a href="/ai" class="btn btn-danger rounded-pill px-4">
+          <i class="fa-solid fa-wand-magic-sparkles me-1"></i> Search with AI
+        </a>
+      </div>
+    </div>
+  <% } else { %>
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-4">
+      <% for(listItem of list) { %>
+        <div class="col">
+          <%- include("includes/card.ejs", { listItem }) %>
+        </div>
+      <% } %>
+    </div>
+  <% } %>
+</div>
+
+<!-- Mapbox Script for Homepage Exploration -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const btnCardsView = document.getElementById('btnCardsView');
+    const btnMapView = document.getElementById('btnMapView');
+    const cardsContainer = document.getElementById('homepageCardsContainer');
+    const mapContainer = document.getElementById('homepageMapContainer');
+    const btnFitMap = document.getElementById('btnFitMap');
+
+    let mapInitialized = false;
+    let homeMap = null;
+    let bounds = null;
+
+    const listingsData = <%- JSON.stringify(list.map(l => ({
+      id: l._id,
+      title: l.title,
+      price: l.price,
+      location: l.location,
+      country: l.country,
+      image: l.image && l.image.url ? l.image.url : '',
+      category: l.category || '1BHK',
+      coordinates: l.geometry && l.geometry.coordinates && (l.geometry.coordinates[0] !== 0 || l.geometry.coordinates[1] !== 0) 
+        ? l.geometry.coordinates 
+        : [77.2090 + (Math.random() - 0.5) * 0.1, 28.6139 + (Math.random() - 0.5) * 0.1]
+    }))) %>;
+
+    function initHomeMap() {
+      if (mapInitialized) {
+        homeMap.resize();
+        return;
+      }
+
+      if (typeof mapboxgl === 'undefined' || !"<%= mapToken %>") {
+        console.warn("Mapbox GL JS is not loaded or token missing");
+        return;
+      }
+
+      mapboxgl.accessToken = "<%= mapToken %>";
+      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      const mapStyle = isDark ? 'mapbox://styles/mapbox/dark-v11' : 'mapbox://styles/mapbox/streets-v12';
+
+      homeMap = new mapboxgl.Map({
+        container: 'homepageMap',
+        style: mapStyle,
+        center: [77.2090, 28.6139],
+        zoom: 10
+      });
+
+      homeMap.addControl(new mapboxgl.NavigationControl(), 'top-right');
+      bounds = new mapboxgl.LngLatBounds();
+
+      listingsData.forEach(item => {
+        if (item.coordinates && item.coordinates.length === 2) {
+          bounds.extend(item.coordinates);
+
+          // Custom price tag marker element
+          const el = document.createElement('div');
+          el.className = 'custom-price-marker';
+          el.innerHTML = `<span>&#8377;${item.price.toLocaleString("en-IN")}</span>`;
+
+          const popupHtml = `
+            <div style="max-width: 200px;">
+              ${item.image ? `<img src="${item.image}" style="width: 100%; height: 100px; object-fit: cover; border-radius: 8px; margin-bottom: 6px;">` : ''}
+              <h6 style="margin: 0 0 4px 0; font-weight: 700; font-size: 0.9rem;">${item.title}</h6>
+              <p style="margin: 0 0 6px 0; font-size: 0.75rem; color: #6c757d;">${item.location}, ${item.country}</p>
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-weight: 700; color: #E8456B;">&#8377;${item.price.toLocaleString("en-IN")}</span>
+                <a href="/listing/${item.id}" style="font-size: 0.75rem; font-weight: 600; text-decoration: none;">View &rarr;</a>
+              </div>
+            </div>
+          `;
+
+          const popup = new mapboxgl.Popup({ offset: 25 }).setHTML(popupHtml);
+
+          new mapboxgl.Marker(el)
+            .setLngLat(item.coordinates)
+            .setPopup(popup)
+            .addTo(homeMap);
+        }
+      });
+
+      if (!bounds.isEmpty()) {
+        homeMap.fitBounds(bounds, { padding: 50, maxZoom: 14 });
+      }
+
+      mapInitialized = true;
+    }
+
+    if (btnMapView && btnCardsView) {
+      btnMapView.addEventListener('click', function() {
+        btnMapView.classList.add('btn-danger', 'text-white', 'active');
+        btnMapView.classList.remove('btn-outline-secondary');
+        btnCardsView.classList.remove('btn-danger', 'text-white', 'active');
+        btnCardsView.classList.add('btn-outline-secondary');
+
+        mapContainer.classList.remove('d-none');
+        initHomeMap();
+      });
+
+      btnCardsView.addEventListener('click', function() {
+        btnCardsView.classList.add('btn-danger', 'text-white', 'active');
+        btnCardsView.classList.remove('btn-outline-secondary');
+        btnMapView.classList.remove('btn-danger', 'text-white', 'active');
+        btnMapView.classList.add('btn-outline-secondary');
+
+        mapContainer.classList.add('d-none');
+      });
+
+      if (btnFitMap) {
+        btnFitMap.addEventListener('click', function() {
+          if (homeMap && bounds && !bounds.isEmpty()) {
+            homeMap.fitBounds(bounds, { padding: 50, maxZoom: 14 });
+          }
+        });
+      }
+    }
+  });
+</script>

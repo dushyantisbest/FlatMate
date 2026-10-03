@@ -1,0 +1,172 @@
+<% layout("/layout/boilerplate.ejs") -%>
+<style>
+  .chat-container {
+    height: 70vh;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--border-color);
+    border-radius: var(--card-radius);
+    overflow: hidden;
+    background-color: var(--card-background);
+  }
+  .chat-messages {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 1.25rem;
+    background-color: var(--surface-color);
+  }
+  .message-bubble {
+    max-width: 75%;
+    padding: 10px 16px;
+    border-radius: 20px;
+    margin-bottom: 8px;
+    word-wrap: break-word;
+    font-size: 0.95rem;
+  }
+  .message-sent {
+    background-color: var(--accent-color);
+    color: #FFFFFF;
+    margin-left: auto;
+    border-bottom-right-radius: 4px;
+  }
+  .message-received {
+    background-color: var(--card-background);
+    color: var(--text-primary);
+    margin-right: auto;
+    border-bottom-left-radius: 4px;
+    border: 1px solid var(--border-color);
+  }
+  .chat-input-area {
+    padding: 1rem;
+    background-color: var(--card-background);
+    border-top: 1px solid var(--border-color);
+  }
+</style>
+
+<div class="container mt-4 mb-5">
+  <div class="row">
+    <div class="col-md-8 offset-md-2">
+      <% 
+        const otherUser = conversation.participants.find(p => p._id.toString() !== currUser._id.toString());
+      %>
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3>Chat with <%= otherUser ? otherUser.username : 'Unknown User' %></h3>
+        <a href="/chat" class="btn btn-outline-secondary btn-sm">Back to Inbox</a>
+      </div>
+      <% if (conversation.listing) { %>
+        <div class="alert alert-info py-2 px-3 mb-3">
+          Regarding listing: <strong><%= conversation.listing.title %></strong>
+        </div>
+      <% } %>
+
+      <div class="chat-container shadow-sm">
+        <div class="chat-messages" id="chatMessages">
+          <% messages.forEach(msg => { %>
+            <% const isSentByMe = msg.sender._id.toString() === currUser._id.toString(); %>
+            <div class="d-flex flex-column <%= isSentByMe ? 'align-items-end' : 'align-items-start' %>">
+              <div class="message-bubble <%= isSentByMe ? 'message-sent' : 'message-received' %>">
+                <%= msg.text %>
+              </div>
+              <small class="text-muted mb-2" style="font-size: 0.7rem;">
+                <%= new Date(msg.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) %>
+              </small>
+            </div>
+          <% }) %>
+        </div>
+        
+        <div class="chat-input-area">
+          <form id="chatForm" class="d-flex">
+            <input type="text" id="messageInput" class="form-control me-2" placeholder="Type a message..." autocomplete="off" required>
+            <button type="submit" class="btn btn-primary" id="sendBtn">Send</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  const currUserId = "<%= currUser._id %>";
+  const conversationId = "<%= conversation._id %>";
+  
+  const socket = io();
+  
+  socket.emit('joinConversation', conversationId);
+  
+  const chatMessages = document.getElementById('chatMessages');
+  const chatForm = document.getElementById('chatForm');
+  const messageInput = document.getElementById('messageInput');
+  const sendBtn = document.getElementById('sendBtn');
+  
+  function scrollToBottom() {
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  }
+  
+  scrollToBottom();
+  
+  socket.on('receiveMessage', (message) => {
+    if (message.sender._id !== currUserId && message.sender !== currUserId) {
+      const msgDiv = document.createElement('div');
+      msgDiv.className = 'd-flex flex-column align-items-start';
+      
+      const timeStr = new Date(message.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      
+      msgDiv.innerHTML = `
+        <div class="message-bubble message-received">
+          ${message.text}
+        </div>
+        <small class="text-muted mb-2" style="font-size: 0.7rem;">
+          ${timeStr}
+        </small>
+      `;
+      chatMessages.appendChild(msgDiv);
+      scrollToBottom();
+    }
+  });
+  
+  chatForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const text = messageInput.value.trim();
+    if (!text) return;
+    
+    sendBtn.disabled = true;
+    
+    try {
+      const response = await fetch(`/chat/${conversationId}/messages`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ text })
+      });
+      
+      if (response.ok) {
+        const msg = await response.json();
+        
+        const msgDiv = document.createElement('div');
+        msgDiv.className = 'd-flex flex-column align-items-end';
+        
+        const timeStr = new Date(msg.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        
+        msgDiv.innerHTML = `
+          <div class="message-bubble message-sent">
+            ${msg.text}
+          </div>
+          <small class="text-muted mb-2" style="font-size: 0.7rem;">
+            ${timeStr}
+          </small>
+        `;
+        
+        chatMessages.appendChild(msgDiv);
+        messageInput.value = '';
+        scrollToBottom();
+      }
+    } catch (err) {
+      console.error("Error sending message:", err);
+    } finally {
+      sendBtn.disabled = false;
+      messageInput.focus();
+    }
+  });
+</script>

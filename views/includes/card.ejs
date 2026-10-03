@@ -1,15 +1,38 @@
 <a href="/listing/<%= listItem._id %>" class="card-link text-decoration-none">
-  <div class="card listing-card border-light h-100">
-    <img
-      src="<%= listItem?.image?.url || '/images/default.jpg' %>"
-      class="card-img-top img-fluid"
-      alt="<%= listItem.title %>"
-    />
-    <div class="card-body d-flex flex-column">
-      <h5 class="card-title text-dark"><%= listItem.title %></h5>
-      <p class="card-text mt-auto text-dark">
-        &#x20B9;<%= listItem.price.toLocaleString("en-IN") %>
+  <div class="card listing-card h-100 border-0 shadow-sm position-relative overflow-hidden" style="border-radius: 16px;">
+    <div class="position-relative">
+      <img
+        src="<%= listItem?.image?.url || 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?q=80&w=800&auto=format&fit=crop' %>"
+        class="card-img-top img-fluid"
+        alt="<%= listItem.title %>"
+        style="height: 220px; object-fit: cover; border-top-left-radius: 16px; border-top-right-radius: 16px;"
+      />
+      <div class="position-absolute top-0 end-0 m-2 d-flex flex-column gap-1 align-items-end">
+        <% if (listItem.category) { %>
+          <span class="badge px-3 py-1 text-uppercase fw-semibold" style="background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(4px); border-radius: 20px; font-size: 0.72rem; letter-spacing: 0.5px; color: #ffffff;">
+            <%= listItem.category %>
+          </span>
+        <% } %>
+        <% if (listItem.roomType) { %>
+          <span class="badge px-2 py-1" style="background: rgba(232, 69, 107, 0.85); backdrop-filter: blur(4px); border-radius: 20px; font-size: 0.65rem; color: #ffffff;">
+            <%= listItem.roomType %>
+          </span>
+        <% } %>
+      </div>
+    </div>
+    <div class="card-body d-flex flex-column p-3">
+      <h5 class="card-title fw-bold mb-1 text-truncate"><%= listItem.title %></h5>
+      <p class="listing-card-location small mb-2 text-truncate">
+        <i class="fa-solid fa-location-dot text-danger me-1"></i>
+        <%= listItem.location %>, <%= listItem.country %>
       </p>
+      <div class="mt-auto d-flex align-items-baseline justify-content-between pt-2 border-top card-footer-border">
+        <div>
+          <span class="fs-5 fw-bold text-danger">&#x20B9;<%= listItem.price ? listItem.price.toLocaleString("en-IN") : 0 %></span>
+          <span class="listing-price-period small"> / month</span>
+        </div>
+        <span class="small text-primary fw-semibold view-details-link">View Details &rarr;</span>
+      </div>
     </div>
   </div>
 </a>

@@ -1,0 +1,242 @@
+<% layout("/layout/boilerplate.ejs") -%>
+
+<style>
+  .ai-chat-container {
+    height: 70vh;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--border-color);
+    border-radius: var(--card-radius);
+    background-color: var(--card-background);
+    overflow: hidden;
+  }
+  
+  .ai-chat-messages {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 1.5rem;
+    background-color: var(--surface-color);
+  }
+  
+  .ai-bubble {
+    max-width: 85%;
+    padding: 12px 18px;
+    border-radius: 18px;
+    margin-bottom: 1rem;
+    line-height: 1.5;
+  }
+  
+  .ai-user {
+    background-color: var(--accent-color);
+    color: white;
+    margin-left: auto;
+    border-bottom-right-radius: 4px;
+  }
+  
+  .ai-bot {
+    background-color: var(--card-background);
+    color: var(--text-primary);
+    margin-right: auto;
+    border-bottom-left-radius: 4px;
+    border: 1px solid var(--border-color);
+  }
+  
+  .ai-input-area {
+    padding: 1rem;
+    background-color: var(--card-background);
+    border-top: 1px solid var(--border-color);
+  }
+  
+  .listing-card-mini {
+    display: flex;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-top: 10px;
+    background: var(--card-background);
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  
+  .listing-card-mini:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px var(--hover-shadow);
+    color: inherit;
+  }
+  
+  .listing-img-mini {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+  }
+  
+  .listing-info-mini {
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  
+  .typing-indicator {
+    display: none;
+    padding: 12px 18px;
+    background-color: var(--card-background);
+    border: 1px solid var(--border-color);
+    border-radius: 18px;
+    border-bottom-left-radius: 4px;
+    margin-bottom: 1rem;
+    max-width: fit-content;
+    align-items: center;
+    gap: 4px;
+  }
+  
+  .dot {
+    width: 8px;
+    height: 8px;
+    background-color: #6c757d;
+    border-radius: 50%;
+    animation: typing 1.4s infinite ease-in-out both;
+  }
+  
+  .dot:nth-child(1) { animation-delay: -0.32s; }
+  .dot:nth-child(2) { animation-delay: -0.16s; }
+  
+  @keyframes typing {
+    0%, 80%, 100% { transform: scale(0); }
+    40% { transform: scale(1); }
+  }
+</style>
+
+<div class="container mt-4 mb-5">
+  <div class="row">
+    <div class="col-md-10 offset-md-1">
+      <div class="d-flex align-items-center mb-4">
+        <i class="fa-solid fa-robot fs-2 text-primary me-3"></i>
+        <div>
+          <h3 class="mb-0">AI Assistant</h3>
+          <p class="text-muted mb-0">Ask me to find places like "cheap apartments in Mumbai under 15000"</p>
+        </div>
+      </div>
+
+      <div class="ai-chat-container">
+        <div class="ai-chat-messages" id="aiChatMessages">
+          <div class="ai-bubble ai-bot">
+            Hello! I'm your Flatmate AI Assistant. What kind of place are you looking for today? You can describe the location, price range, and more.
+          </div>
+          
+          <div class="typing-indicator" id="typingIndicator">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+          </div>
+        </div>
+        
+        <div class="ai-input-area">
+          <form id="aiForm" class="d-flex">
+            <input type="text" id="aiInput" class="form-control form-control-lg me-2" placeholder="E.g., Find me a place in New York under 2000" autocomplete="off" required minlength="3">
+            <button type="submit" class="btn btn-danger btn-lg px-4" id="aiSendBtn">
+              <i class="fa-solid fa-paper-plane"></i>
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const aiForm = document.getElementById('aiForm');
+    const aiInput = document.getElementById('aiInput');
+    const aiChatMessages = document.getElementById('aiChatMessages');
+    const typingIndicator = document.getElementById('typingIndicator');
+    const aiSendBtn = document.getElementById('aiSendBtn');
+    
+    function scrollToBottom() {
+      aiChatMessages.scrollTop = aiChatMessages.scrollHeight;
+    }
+    
+    function addMessage(text, isUser = false) {
+      const div = document.createElement('div');
+      div.className = `ai-bubble ${isUser ? 'ai-user' : 'ai-bot'}`;
+      div.textContent = text;
+      
+      aiChatMessages.insertBefore(div, typingIndicator);
+      scrollToBottom();
+    }
+    
+    function addListings(listings) {
+      if (!listings || listings.length === 0) return;
+      
+      const container = document.createElement('div');
+      container.className = 'mb-3';
+      
+      listings.forEach(listing => {
+        const link = document.createElement('a');
+        link.href = `/listing/${listing._id}`;
+        link.className = 'listing-card-mini';
+        
+        const imgUrl = listing.image && listing.image.url ? listing.image.url : 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?q=80&w=300&auto=format&fit=crop';
+        
+        link.innerHTML = `
+          <img src="${imgUrl}" class="listing-img-mini" alt="Listing image">
+          <div class="listing-info-mini">
+            <h6 class="mb-1 text-truncate" style="max-width: 250px;">${listing.title}</h6>
+            <div class="text-muted small mb-1"><i class="fa-solid fa-location-dot me-1"></i> ${listing.location}, ${listing.country}</div>
+            <div class="fw-bold">&#8377; ${listing.price.toLocaleString("en-IN")} / night</div>
+          </div>
+        `;
+        
+        container.appendChild(link);
+      });
+      
+      aiChatMessages.insertBefore(container, typingIndicator);
+      scrollToBottom();
+    }
+    
+    aiForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const message = aiInput.value.trim();
+      if (!message) return;
+      
+      addMessage(message, true);
+      aiInput.value = '';
+      aiInput.disabled = true;
+      aiSendBtn.disabled = true;
+      
+      typingIndicator.style.display = 'flex';
+      scrollToBottom();
+      
+      try {
+        const response = await fetch('/ai/query', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message })
+        });
+        
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.message || 'Something went wrong');
+        }
+        
+        const data = await response.json();
+        
+        typingIndicator.style.display = 'none';
+        
+        addMessage(data.summary, false);
+        if (data.listings && data.listings.length > 0) {
+          addListings(data.listings);
+        }
+        
+      } catch (err) {
+        typingIndicator.style.display = 'none';
+        addMessage(`Error: ${err.message}. Please try again.`, false);
+      } finally {
+        aiInput.disabled = false;
+        aiSendBtn.disabled = false;
+        aiInput.focus();
+      }
+    });
+  });
+</script>

@@ -1,3 +1,4 @@
+import "dotenv/config";
 import express from "express";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -9,7 +10,6 @@ import flash from "connect-flash";
 import passport from "passport";
 import localStrategy from "passport-local";
 import User from "./models/user.model.js";
-import dotenv from "dotenv";
 //get the dirname variable
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -26,8 +26,6 @@ const sessionOptions = {
     expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
   },
 };
-//code for setting path
-dotenv.config();
 // all the middle wares
 app.engine("ejs", engine);
 app.set("view engine", "ejs");
@@ -43,9 +41,11 @@ app.use((req, res, next) => {
   res.locals.success = req.flash("success");
   res.locals.error = req.flash("error");
   res.locals.currUser = req.user;
+  res.locals.mapToken = process.env.MAPBOX_TOKEN || "";
   next();
 });
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
 app.use(methodOverride("_method"));
 
